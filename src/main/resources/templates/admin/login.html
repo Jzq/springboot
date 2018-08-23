@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>管理平台 | 登录</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" th:href="@{/adminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/adminLTE/bower_components/font-awesome/css/font-awesome.min.css}">
+<link rel="stylesheet" th:href="@{/adminLTE/bower_components/Ionicons/css/ionicons.min.css}">
+<link rel="stylesheet" th:href="@{/adminLTE/dist/css/AdminLTE.min.css}">
+<link rel="stylesheet" th:href="@{/adminLTE/dist/css/skins/_all-skins.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/iCheck/square/blue.css}">
+<link rel="stylesheet" th:href="@{/common/css/login.css}">
+<!--[if lt IE 9]>
+<script th:src="@{/plugins/html5shiv/html5shiv.min.js}"></script>
+<script th:src="@{/plugins/respond/respond.min.js}"></script>
+<![endif]-->
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo">
+        <a href="/login"><b>管理平台登录</b>
+            <small>V1.0</small>
+        </a>
+    </div>
+    <div class="login-box-body">
+        <form id="loginForm" model="" action="" method="post">
+            <div class="form-group has-feedback">
+                <span class="glyphicon glyphicon-user form-control-feedback" title="账号"></span>
+                <input type="text" id="username" name="username" class="form-control required" data-msg-required="请填写账号" placeholder="账号"/>
+            </div>
+            <div class="form-group has-feedback">
+				<span class="glyphicon glyphicon-lock form-control-feedback"title="密码"></span>
+                <input id="password" type="password" name="password" class="form-control required" data-msg-required="请填写密码." placeholder="密码" autocomplete="off"/>
+            </div>
+            <div class="row form-group has-feedback">
+                <div class="col-xs-8">
+                    <input id="randomCode" type="text" name="randomCode" class="form-control required" data-msg-required="请填写验证码." placeholder="验证码" autocomplete="off"/>
+                </div>
+                <div class="col-xs-4">
+                    <img th:src="@{/kaptcha/validateCode.jpg}" onclick="changeValidateCode(this)"style="cursor: pointer"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="mt5 icheck">
+                    <label title="公共场所慎用,下次不需要再填写帐号">
+                        <input data-style="square-blue"
+                               class="form-control"
+                               type="checkbox"
+                               id="rememberMe"
+                               name="rememberMe"
+                               th:checked="${rememberMe}"
+                               > 记住账号</label> &nbsp;
+
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block btn-flat" id="btnSubmit" data-loading="登录验证成功，正在进入..."
+                        data-login-valid="正在验证登录，请稍后...">立即登录
+                </button>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-xs-12">
+                <a href="" class="pull-left">[ 忘记密码]</a>
+                <a href="/register" class="pull-right ml10">[ 注册账号 ]</a>
+            </div>
+        </div>
+    </div>
+    <div class="login-copyright">
+        &copy; 2018 <a href="">Jizhiqiang</a>
+    </div>
+</div>
+<script th:src="@{/plugins/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/plugins/jquery/jquery-migrate-3.0.0.min.js}"></script>
+<script th:src="@{/adminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/plugins/iCheck/icheck.min.js}"></script>
+<script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
+<script th:src="@{/plugins/jquery-validation/additional-methods.min.js}"></script>
+<script th:src="@{/plugins/jquery-validation/localization/messages_zh.min.js}"></script>
+<script th:src="@{/plugins/jquery-validation/form-validate-config.js}"></script>
+<script th:src="@{/common/js/common.js}"></script>
+<script th:src="@{/common/js/des.js}"></script>
+<script th:src="@{/plugins/toastr/toastr.min.js}"></script>
+<link rel="stylesheet" th:href="@{/plugins/toastr/toastr.css}">
+<script>
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+        var username  = getCookie("username");
+        var rememberMe = getCookie("rememberMe_key");
+        if(rememberMe == 'yes'){
+            $("#username").val(username);
+        }
+
+
+        $("#loginForm").validate(default_config);
+    });
+
+    function formSubmit(form) {
+        var _password = $("#password").val();
+        var randomCode = $("#randomCode").val();
+        var username = $("#username").val();
+        var password = DesUtils.encode(_password, '1,2,3');
+        var rememberMe =$('#rememberMe').is(':checked');
+        $.ajax({
+            url: "login",
+            data: {username:username,password:password,rememberMe:rememberMe,randomCode:randomCode},
+            type: "POST",
+            success: function (result) {
+                if(result.code =="500"){
+                    toastr.options = {
+                        closeButton: false,
+                        debug: false,
+                        progressBar: true,
+                        positionClass: "toast-bottom-right",
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        timeOut: "5000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut"
+                    };
+                    toastr.error(result.msg);
+                }else{
+                    parent.location.href = 'index';
+                }
+
+            }
+        });
+
+        return false;
+    }
+    function changeValidateCode(dom) {
+        dom.src = "/kaptcha/validateCode.jpg?"+Math.random();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!-- 后台页面布局，自动包装head、menu、NAV和foot -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <meta th:replace="admin/include/head :: head"/>
+</head>
+<body th:class=" ${skinName} ">
+    <header class="main-header" th:include="admin/include/nav :: nav"></header>
+    <aside class="main-sidebar" th:include="admin/include/menu :: menu"></aside>
+    <div class="content-wrapper">
+        <div layout:fragment="content"></div>
+    </div>
+    <footer th:replace="admin/include/foot :: foot"></footer>
+</div>
+<script>
+    function setHeightFrame(){
+        var Selector = {
+            wrapper       : '.wrapper',
+            contentWrapper: '.content-wrapper',
+            layoutBoxed   : '.layout-boxed',
+            mainFooter    : '.main-footer',
+            mainHeader    : '.main-header',
+            sidebar       : '.sidebar',
+            controlSidebar: '.control-sidebar',
+            fixed         : '.fixed',
+            sidebarMenu   : '.sidebar-menu',
+            logo          : '.main-header .logo'
+        };
+        var ClassName = {
+            fixed         : 'fixed',
+            holdTransition: 'hold-transition'
+        };
+
+        // Get window height and the wrapper height
+        var footerHeight = $(Selector.mainFooter).outerHeight() || 0;
+        var headerHeight  = $(Selector.mainHeader).outerHeight() || 0;
+        var neg           = headerHeight + footerHeight+5;
+        var windowHeight  = $(window).height();
+        var sidebarHeight = $(Selector.sidebar).height() || 0;
+
+        // Set the min-height of the content and sidebar based on
+        // the height of the document.
+        if ($('body').hasClass(ClassName.fixed)) {
+            $("#menuFrame").css('min-height', windowHeight - neg);
+        } else {
+            var postSetHeight;
+
+            if (windowHeight >= sidebarHeight) {
+                $("#menuFrame").css('min-height', windowHeight - neg);
+                postSetHeight = windowHeight - neg;
+            } else {
+                $("#menuFrame").css('min-height', sidebarHeight);
+                postSetHeight = sidebarHeight;
+            }
+
+            // Fix for the control sidebar height
+            var $controlSidebar = $(Selector.controlSidebar);
+            if (typeof $controlSidebar !== 'undefined') {
+                if ($controlSidebar.height() > postSetHeight)
+                    $("#menuFrame").css('min-height', $controlSidebar.height());
+            }
+        }
+    }
+
+    function switchSkin(){
+        var prefix = "/switchSkin";
+        layer.open({
+            type : 2,
+            title : '切换主题',
+            maxmin : true,
+            shadeClose : false, // 点击遮罩关闭层
+            area : [ '500px', '390px' ],
+            content : prefix + '/view'
+        });
+    }
+    $(".treeview-item").click(function (){
+        $(".treeview-item").removeClass("active");
+        $(this).addClass("active").siblings().removeClass("active");
+    });
+</script>
+</body>
+</html>

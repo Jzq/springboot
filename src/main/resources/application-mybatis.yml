@@ -1,0 +1,4 @@
+
+mybatis:
+  type-aliases-package: com.jzq.modules.*.entity
+  mapper-locations: classpath:mapper/*Mapper.xml

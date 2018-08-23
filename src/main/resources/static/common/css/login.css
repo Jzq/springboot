@@ -1,0 +1,23 @@
+.login-page .login-copyright {
+    text-align: center;
+    margin-top: 20px;
+}
+.login-page .login-copyright, .login-page .login-copyright a {
+    color: #666;
+}
+
+.login-box, .register-box {
+    width: 360px;
+    position: absolute;
+    top:30%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+.login-page .login-box-body {
+    width: 360px;
+    margin: auto;
+    padding: 28px;
+    background: #fff;
+    box-shadow: 0 2px 6px #999;
+    border-radius: 5px;
+}

@@ -1,0 +1,23 @@
+.register-page .register-copyright {
+    text-align: center;
+    margin-top: 20px;
+}
+.register-page .register-copyright, .register-page .register-copyright a {
+    color: #666;
+}
+
+.register-box, .register-box {
+    width: 360px;
+    position: absolute;
+    top:30%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+.register-page .register-box-body {
+    width: 360px;
+    margin: auto;
+    padding: 28px;
+    background: #fff;
+    box-shadow: 0 2px 6px #999;
+    border-radius: 5px;
+}

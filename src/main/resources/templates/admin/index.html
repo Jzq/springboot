@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorator="admin/include/layout">
+<head>
+    <title>前端框架示例</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <iframe id="menuFrame" name="menuFrame" src="/main" frameborder="0" height="" width="100%" onload="setHeightFrame()"></iframe>
+</div>
+</body>
+</html>
